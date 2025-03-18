@@ -2,8 +2,14 @@ import os
 from dotenv import load_dotenv
 import cohere
 
+import logging
+
 from domain.service.system_prompt_service import SystemPromptService
 from domain.service.chat_history_service import ChatHistoryService
+
+# Configurer le logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Charger les variables d'environnement depuis un fichier .env
 load_dotenv()
@@ -19,6 +25,8 @@ class CohereTextGenerator():
     def generate_text(self, prompt: str) -> str:
         # Récupérer le system prompt depuis le service
         system_prompt = self.system_prompt_service.get_system_prompt()
+
+        logger.info("Text generation endpoint called")
 
         # Construire l'historique des messages
         chat_history = [
