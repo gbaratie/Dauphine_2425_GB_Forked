@@ -8,5 +8,6 @@ streamlit
 cohere
 fastAPI
 
-##To import file with FastAPI
+##RAG implementation
 python-multipart
+pinecone-client

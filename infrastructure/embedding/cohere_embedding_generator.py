@@ -21,5 +21,5 @@ class CohereEmbeddingGenerator:
         text = file_content.decode("utf-8")
         logger.info("Embedding endpoint called")
         response = self.client.embed(texts=[text])
-        #logger.info(f"Generated embedding: {response.embeddings[0]}")
+        logger.info(f"Generated embedding: {response.embeddings[0]}")
         return response.embeddings[0]
