@@ -10,4 +10,4 @@ fastAPI
 
 ##RAG implementation
 python-multipart
-pinecone-client
+pinecone

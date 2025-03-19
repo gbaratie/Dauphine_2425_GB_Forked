@@ -1,4 +1,5 @@
 import streamlit as st
+import requests
 
 # Page title
 st.title("Upload Files for RAG")
@@ -24,7 +25,15 @@ if uploaded_files:
     st.success(f"{len(uploaded_files)} file(s) successfully uploaded!")
     for file in uploaded_files:
         st.write(f"📄 {file.name}")
-
+        
+        # Envoyer le fichier à l'API FastAPI
+        files = {'file': (file.name, file, file.type)}
+        response = requests.post("http://127.0.0.1:8000/files/upload-file", files=files)
+        
+        if response.status_code == 200:
+            st.success(f"File {file.name} uploaded and processed successfully!")
+        else:
+            st.error(f"Failed to upload {file.name}. Error: {response.text}")
 
 # Sidebar with Documentation Links
 with st.sidebar:

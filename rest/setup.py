@@ -2,14 +2,16 @@ from domain.adapter.generator_controller_adapter import GeneratorControllerAdapt
 from domain.service.text_generation_service import TextGenerationService
 from domain.service.system_prompt_service import SystemPromptService 
 from domain.service.chat_history_service import ChatHistoryService  
-from domain.service.embedding_service import EmbeddingService # Nouveau service
+from domain.service.embedding_service import EmbeddingService
 
-from infrastructure.adapter.text_generator_adapter import TextGeneratorAdapter
-from infrastructure.text_generator.cohere_text_generator import CohereTextGenerator  # Import du générateur Cohere
+from infrastructure.adapter.text_generator_adapter import TextGeneratorAdapter, VectorDatabaseAdapter
+from infrastructure.text_generator.cohere_text_generator import CohereTextGenerator
 from infrastructure.adapter.embedding_adapter import EmbeddingAdapter
 from infrastructure.embedding.cohere_embedding_generator import CohereEmbeddingGenerator
+from infrastructure.database.pinecone_vector_db import PineconeVectorDB
 
 from rest.endpoint.generator_rest_adapter import GeneratorRestAdapter
+from rest.endpoint.file_upload_rest_adapter import FileUploadRestAdapter
 
 def create_generator_rest_adapter():
     # Initialiser les services
@@ -27,8 +29,13 @@ def create_generator_rest_adapter():
     generator_controller_adapter = GeneratorControllerAdapter(text_generation_service)
     return GeneratorRestAdapter(generator_controller_adapter)
 
-
 def create_embedding_service():
     cohere_embedding_generator = CohereEmbeddingGenerator()
     embedding_adapter = EmbeddingAdapter(cohere_embedding_generator)
-    return EmbeddingService(embedding_adapter)
+    pinecone_vector_db = PineconeVectorDB()  # Créer une instance de PineconeVectorDB
+    persistence_adapter = VectorDatabaseAdapter(pinecone_vector_db)  # Créer une instance de VectorDatabaseAdapter
+    return EmbeddingService(embedding_adapter, persistence_adapter)  # Passer les deux adaptateurs au constructeur
+
+def create_file_upload_rest_adapter():
+    # Créez et configurez l'adaptateur pour l'upload de fichiers ici
+    return FileUploadRestAdapter()
