@@ -20,12 +20,17 @@ def create_generator_rest_adapter():
 
     # Initialiser le générateur Cohere avec le service de prompt
     cohere_text_generator = CohereTextGenerator(system_prompt_service, chat_history_service)
+    cohere_embedding_generator = CohereEmbeddingGenerator()
+    pinecone_vector_db = PineconeVectorDB()
 
     # Injecter CohereTextGenerator dans TextGeneratorAdapter
     text_generator_adapter = TextGeneratorAdapter(cohere_text_generator=cohere_text_generator)
+    embedding_adapter = EmbeddingAdapter(cohere_embedding_generator=cohere_embedding_generator)
+  # Créer une instance de PineconeVectorDB
+    persistence_adapter = VectorDatabaseAdapter(pinecone_vector_db)
 
     # Configurer les services et adaptateurs
-    text_generation_service = TextGenerationService(text_generator_adapter)
+    text_generation_service = TextGenerationService(text_generator_adapter, embedding_adapter, persistence_adapter)
     generator_controller_adapter = GeneratorControllerAdapter(text_generation_service)
     return GeneratorRestAdapter(generator_controller_adapter)
 

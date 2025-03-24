@@ -36,8 +36,17 @@ class PineconeVectorDB:
         self.index.upsert(vectors=[(vector_id, embedding, metadata)])
 
     def query_vector(self, embedding: List[float], top_k: int = 10) -> List[Dict]:
+        if not isinstance(embedding, list) or not all(isinstance(x, float) for x in embedding):
+            logger.error(f"Invalid embedding format: {embedding}")
+            raise ValueError("Embedding must be a list of floats.")
+        if any(x is None or not (-1e6 < x < 1e6) or x != x or x in [float('inf'), float('-inf')] for x in embedding):
+            logger.error(f"Invalid values in embedding: {embedding}")
+            raise ValueError("Embedding contains invalid values (e.g., NaN, Inf, or out of range).")
+
+
         logger.info(f"Querying Pinecone index with embedding: {embedding[:5]}... (truncated)")
-        results = self.index.query(queries=[embedding], top_k=top_k)
+        results = self.index.query(vector=[embedding], top_k=top_k)
+        logger.info(f"Result query: {results}")
         return results['matches']
 
     def delete_vector(self, vector_id: str) -> None:

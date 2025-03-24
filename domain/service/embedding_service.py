@@ -30,3 +30,14 @@ class EmbeddingService:
         self.persistence_port.save_vector(file_embedded.filename, file_embedded.embedding)
 
         return file_embedded
+    
+    def embed_string(self, string: str) -> FileEmbedded:
+        # Appelle le port pour obtenir l'embedding
+        embedding = self.embedding_port.generate_embedding(string.encode("utf-8"))
+        logger.info(f"Generated embedding for string: {embedding}")
+
+        # Sauvegarde l'embedding dans Pinecone via le port de persistance
+        # Utilise un nom fictif pour identifier cet embedding
+        string_embedded = FileEmbedded(filename="string_embedding", embedding=embedding)
+
+        return string_embedded

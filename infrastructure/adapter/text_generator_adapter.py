@@ -24,12 +24,18 @@ class TextGeneratorAdapter(TextGeneratorPort):
         """
         self.cohere_text_generator = cohere_text_generator
 
-    def get_generated_text(self, prompt: str) -> str:
+    def get_generated_text(self, prompt: str, is_rag: bool = False) -> str:
         """
         Implémente la méthode du port pour générer du texte.
         :param prompt: Le message utilisateur.
+        :param is_rag: Indicateur pour le mode RAG.
         :return: La réponse générée par Cohere.
         """
+        if is_rag:
+            # Logique pour le mode RAG (par exemple, ajouter des passages pertinents)
+            # Vous pouvez appeler une méthode spécifique pour gérer le mode RAG ici
+            pass
+        # Appel standard au générateur de texte
         return self.cohere_text_generator.generate_text(prompt=prompt)
 
 
@@ -57,7 +63,7 @@ class VectorDatabaseAdapter(PersistencePort):
         """
         self.vector_db.delete_vector(vector_id=vector_id)
 
-    def query_vectors(self, embedding: List[float], top_k: int = 10) -> List[Dict]:
+    def query_vector(self, embedding: List[float], top_k: int = 10) -> List[Dict]:
         """
         Recherche les vecteurs les plus proches dans Pinecone.
         :param embedding: Embedding à rechercher.

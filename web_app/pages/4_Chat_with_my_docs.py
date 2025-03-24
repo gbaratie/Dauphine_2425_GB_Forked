@@ -11,28 +11,22 @@ import requests
 
 from rest.model.chat_request import ChatRequest
 
+# Titles
+st.title("💬 Knowledge Base Chatbot")
+st.caption("🚀 Chatbot using the RAG (Retrieval-Augmented Generation) method")
 
-
-#Titles
-st.title("💬 Chatbot")
-st.caption("🚀 My First Chatbot using Cohere")
-
-
-
-#Sidebar with description
+# Sidebar with description
 with st.sidebar:
     st.markdown("""
-                This page demonstrates how to create a memory-enabled chatbot using Cohere, showcasing
-                the integration of advanced NLP capabilities in a user-friendly interface. Explore the 
-                examples and learn how to build your own intelligent applications.     
+                This page demonstrates how to create a chatbot based on a knowledge base using the RAG method.
+                Explore the examples and learn how to build your own intelligent applications.
                 """)
     st.header("📚 Learn More")
-    st.markdown("""Explore the examples and learn how to build your own intelligent applications.
-                [Cohere API](https://docs.cohere.com/reference/chat)""")
+    st.markdown("""[Cohere API](https://docs.cohere.com/reference/chat)""")
             
 st.markdown(
         """
-        On this demonstration we will be able to send request to Cohere and have a chat with history 
+        In this demonstration, we will query a knowledge base to provide enriched and contextual answers.
         """
         )
 
@@ -55,7 +49,7 @@ if prompt := st.chat_input():
     st.chat_message("user").write(prompt)
 
     # Prepare the payload for the API request
-    request = ChatRequest(prompt=prompt, is_rag=False)
+    request = ChatRequest(prompt=prompt, is_rag=True)
     # Send the request to the API
     try:
         response = requests.post(api_url, json=request.to_dict())

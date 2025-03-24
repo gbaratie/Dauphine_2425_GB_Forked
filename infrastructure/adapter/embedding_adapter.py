@@ -8,3 +8,6 @@ class EmbeddingAdapter(EmbeddingPort):
 
     def generate_embedding(self, file_content: bytes) -> List[float]:
         return self.cohere_embedding_generator.generate_embedding(file_content)
+
+    def embed_string(self, string: str) -> List[float]:
+        return self.cohere_embedding_generator.generate_embedding(string.encode("utf-8"))

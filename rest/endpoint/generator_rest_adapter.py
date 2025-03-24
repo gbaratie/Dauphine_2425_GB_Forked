@@ -21,7 +21,7 @@ class GeneratorRestAdapter:
         """
         try:
             # Appelle le contrôleur pour générer une réponse
-            response = self.controller.generate_message(request.prompt)
+            response = self.controller.generate_message(request.prompt, is_rag=request.is_rag)
             
             # Retourne la réponse encapsulée
             return ChatResponse(response=response)
